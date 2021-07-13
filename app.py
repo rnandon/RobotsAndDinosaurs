@@ -1,6 +1,7 @@
 ## Imports
 ########################################################
 import os
+from random import randint
 
 
 ## Classes
@@ -87,7 +88,7 @@ class Battlefield:
             self.dino_turn(dino)
             valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
             if len(valid_robots) == 0:
-                self.winnner = "Dinosaurs"
+                self.winner = "Dinosaurs"
 
     def dino_turn(self, dinosaur):
         valid_robots = [robot.name.rstrip() for robot in self.fleet.robots if robot.health > 0]
@@ -154,14 +155,15 @@ class Herd:
     def create_herd(self):
         names = ["Grr ", "Gar ", "Bill"]
         for i in range(3):
-            self.dinosaurs.append(Dinosaur(names[i], 5))
+            self.dinosaurs.append(Dinosaur(names[i], 100))
 
 class Robot:
     def __init__(self, name):
         self.name = name
         self.health = 100
         self.power = 100
-        self.weapon = Weapon("weapon name", 5)
+        weapons = [Weapon("Sword", 1), Weapon("Axe", 1), Weapon("Stuffed Rabbit", 1)]
+        self.weapon = weapons[randint(0, len(weapons)-1)]
 
     def attack(self, dinosaur):
         if self.power >= 10:

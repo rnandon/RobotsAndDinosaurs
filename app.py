@@ -1,7 +1,9 @@
 ## Imports
 ########################################################
 import os
+import time
 from random import randint
+
 
 
 ## Classes
@@ -17,6 +19,8 @@ class Battlefield:
     def run_game(self):
         while self.winner == None:
             self.battle()
+
+        self.display_winners()
 
     def display_welcome(self):
         os.system('cls')
@@ -134,7 +138,30 @@ class Battlefield:
         print(options)
 
     def display_winners(self):
-        pass
+        winner_string =  "*********************************************************************\n"
+        winner_string += "***                            WINNERS                            ***\n"
+        winner_string += "*********************************************************************\n"
+        winner_string += "***                                                               ***\n"
+
+        valid_winners = []
+
+        if self.winner == "Dinosaurs":
+            valid_winners = [dinosaur.name for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+            for winner in valid_winners:
+                winner_string += f'***                             {winner}                              ***\n'
+        else:
+            valid_winners = [robot.name for robot in self.fleet.robots if robot.health > 0]
+            for winner in valid_winners:
+                winner_string += f'***                             {winner}                        ***\n'
+        
+        winner_string += "***                                                               ***\n"
+        winner_string += "*********************************************************************\n"
+
+        os.system('cls')
+        print(winner_string)
+
+
+
 
 class Fleet:
     def __init__(self):
@@ -147,6 +174,8 @@ class Fleet:
             self.robots.append(Robot(names[i]))
 
 
+
+
 class Herd:
     def __init__(self):
         self.dinosaurs = []
@@ -155,23 +184,28 @@ class Herd:
     def create_herd(self):
         names = ["Grr ", "Gar ", "Bill"]
         for i in range(3):
-            self.dinosaurs.append(Dinosaur(names[i], 100))
+            self.dinosaurs.append(Dinosaur(names[i], 1))
+
+
+
 
 class Robot:
     def __init__(self, name):
         self.name = name
         self.health = 100
         self.power = 100
-        weapons = [Weapon("Sword", 1), Weapon("Axe", 1), Weapon("Stuffed Rabbit", 1)]
+        weapons = [Weapon("Sword", 100), Weapon("Axe", 100), Weapon("Stuffed Rabbit", 100)]
         self.weapon = weapons[randint(0, len(weapons)-1)]
 
     def attack(self, dinosaur):
         if self.power >= 10:
             dinosaur.health -= self.weapon.attack_power
             self.power -= 10
+            print(f"     {self.name.rstrip()} attacks {dinosaur.name} for {self.weapon.attack_power} damage!")
+            time.sleep(1)
         else:
-            # Not enough power to attack... What to do?
-            pass
+            print(f"     {self.name.rstrip()} doesn't have the power to attack!")
+            time.sleep(1)
 
     def get_health(self):
         if self.health > 99:
@@ -190,10 +224,15 @@ class Robot:
             return f'{self.power}  '
 
 
+
+
 class Weapon:
     def __init__(self, name, attack_power):
         self.name = name
         self.attack_power = attack_power
+
+
+
 
 class Dinosaur:
     def __init__(self, name, attack_power):
@@ -201,14 +240,18 @@ class Dinosaur:
         self.attack_power = attack_power
         self.health = 100
         self.energy = 100
+        self.attack_names = ("Swipe", "Slash", "Stomp")
 
     def attack(self, robot):
         if self.energy >= 10:
+            attack = self.attack_names[randint(0, len(self.attack_names) - 1)]
             robot.health -= self.attack_power
             self.energy -= 10
+            print(f"     {self.name.rstrip()} attacks {robot.name} with {attack} for {self.attack_power} damage!")
+            time.sleep(1)
         else:
-            # Not enough energy to attack... What to do?
-            pass
+            print(f"     {self.name.rstrip()} doesn't have the energy to attack!")
+            time.sleep(1)
 
     def get_health(self):
         if self.health > 99:

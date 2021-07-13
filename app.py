@@ -15,43 +15,7 @@ class Battlefield:
 
     def run_game(self):
         while self.winner == None:
-            # Formats a standard menu to view the current state of the battle
-            # Example Output:
-            # ROBOT: NAME
-            #  HEALTH: 100   POWER: 100
-            game_screen = f'''
-*********************************************************************
-***                          BATTLEFIELD                          ***
-*********************************************************************
-***            ROBOTS            ||           DINOSAURS           ***
-*** **************************** || ***************************** ***
-***  ROBOT: {self.fleet.robots[0].name}           ||   DINOSAUR: {self.herd.dinosaurs[0].name}              ***
-***   HEALTH: {self.fleet.robots[0].get_health()}   POWER: {self.fleet.robots[0].get_power()}   ||    HEALTH: {self.herd.dinosaurs[0].get_health()}   ENERGY: {self.herd.dinosaurs[0].get_energy()}  ***
-***  ROBOT: {self.fleet.robots[1].name}           ||   DINOSAUR: {self.herd.dinosaurs[1].name}              ***
-***   HEALTH: {self.fleet.robots[1].get_health()}   POWER: {self.fleet.robots[1].get_power()}   ||    HEALTH: {self.herd.dinosaurs[1].get_health()}   ENERGY: {self.herd.dinosaurs[1].get_energy()}  ***
-***  ROBOT: {self.fleet.robots[2].name}           ||   DINOSAUR: {self.herd.dinosaurs[2].name}              ***
-***   HEATLH: {self.fleet.robots[2].get_health()}   POWER: {self.fleet.robots[2].get_power()}   ||    HEALTH: {self.herd.dinosaurs[2].get_health()}   ENERGY: {self.herd.dinosaurs[2].get_energy()}  ***
-***                              ||                               ***
-*********************************************************************
-*********************************************************************'''
-
-            # Formats a standard options menu to show all available choices, paired with a list of current options
-            options_screen = '''
-               ***************************************
-               ***         CURRENT ROBOT:          ***
-               ***                                 ***
-               ***************************************
-                                 '''
-
-            os.system('cls')
-            print(game_screen)
-
             self.battle()
-
-
-
-            break
-        print("closing the game now")
 
     def display_welcome(self):
         os.system('cls')
@@ -83,17 +47,43 @@ class Battlefield:
         else:
             exit()
 
+    def display_game_screen(self):
+        # Formats a standard menu to view the current state of the battle
+        # Example Output:
+        # ROBOT: NAME
+        #  HEALTH: 100   POWER: 100
+        game_screen = f'''
+*********************************************************************
+***                          BATTLEFIELD                          ***
+*********************************************************************
+***            ROBOTS            ||           DINOSAURS           ***
+*** **************************** || ***************************** ***
+***  ROBOT: {self.fleet.robots[0].name}           ||   DINOSAUR: {self.herd.dinosaurs[0].name}              ***
+***   HEALTH: {self.fleet.robots[0].get_health()}   POWER: {self.fleet.robots[0].get_power()}   ||    HEALTH: {self.herd.dinosaurs[0].get_health()}   ENERGY: {self.herd.dinosaurs[0].get_energy()}  ***
+***  ROBOT: {self.fleet.robots[1].name}           ||   DINOSAUR: {self.herd.dinosaurs[1].name}              ***
+***   HEALTH: {self.fleet.robots[1].get_health()}   POWER: {self.fleet.robots[1].get_power()}   ||    HEALTH: {self.herd.dinosaurs[1].get_health()}   ENERGY: {self.herd.dinosaurs[1].get_energy()}  ***
+***  ROBOT: {self.fleet.robots[2].name}           ||   DINOSAUR: {self.herd.dinosaurs[2].name}              ***
+***   HEATLH: {self.fleet.robots[2].get_health()}   POWER: {self.fleet.robots[2].get_power()}   ||    HEALTH: {self.herd.dinosaurs[2].get_health()}   ENERGY: {self.herd.dinosaurs[2].get_energy()}  ***
+***                              ||                               ***
+*********************************************************************
+*********************************************************************'''
+        os.system('cls')
+        print(game_screen)
+
+
     def battle(self):
         valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
         valid_dinosaurs = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
 
         for robot in valid_robots:
+            self.display_game_screen()
             self.robo_turn(robot)
             valid_dinosaurs = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
             if len(valid_dinosaurs) == 0:
                 self.winner = "Robots"
 
         for dino in valid_dinosaurs:
+            self.display_game_screen()
             self.dino_turn(dino)
             valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
             if len(valid_robots) == 0:
@@ -185,17 +175,17 @@ class Robot:
         if self.health > 99:
             return f'{self.health}'
         if self.health > 9:
-            return f' {self.health}'
+            return f'{self.health} '
         if self.health <= 9:
-            return f'  {self.health}'
+            return f'{self.health}  '
 
     def get_power(self):
         if self.power > 99:
-            return f'{self.health}'
+            return f'{self.power}'
         if self.power > 9:
-            return f' {self.health}'
+            return f'{self.power} '
         if self.power <= 9:
-            return f'  {self.health}'
+            return f'{self.power}  '
 
 
 class Weapon:
@@ -222,16 +212,16 @@ class Dinosaur:
         if self.health > 99:
             return f'{self.health}'
         if self.health > 9:
-            return f' {self.health}'
+            return f'{self.health} '
         if self.health <= 9:
-            return f'  {self.health}'
+            return f'{self.health}  '
 
     def get_energy(self):
         if self.energy > 99:
-            return f'{self.health}'
+            return f'{self.energy}'
         if self.energy > 9:
-            return f' {self.health}'
+            return f'{self.energy} '
         if self.energy <= 9:
-            return f'  {self.health}'
+            return f'{self.energy}  '
 
 battlefield = Battlefield()

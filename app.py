@@ -15,6 +15,41 @@ class Battlefield:
 
     def run_game(self):
         while self.winner == None:
+            # Formats a standard menu to view the current state of the battle
+            # Example Output:
+            # ROBOT: NAME
+            #  HEALTH: 100   POWER: 100
+            game_screen = f'''
+*********************************************************************
+***                          BATTLEFIELD                          ***
+*********************************************************************
+***            ROBOTS            ||           DINOSAURS           ***
+*** **************************** || ***************************** ***
+***  ROBOT: {self.fleet.robots[0].name}           ||   DINOSAUR: {self.herd.dinosaurs[0].name}              ***
+***   HEALTH: {self.fleet.robots[0].get_health()}   POWER: {self.fleet.robots[0].get_power()}   ||    HEALTH: {self.herd.dinosaurs[0].get_health()}   ENERGY: {self.herd.dinosaurs[0].get_energy()}  ***
+***  ROBOT: {self.fleet.robots[1].name}           ||   DINOSAUR: {self.herd.dinosaurs[1].name}              ***
+***   HEALTH: {self.fleet.robots[1].get_health()}   POWER: {self.fleet.robots[1].get_power()}   ||    HEALTH: {self.herd.dinosaurs[1].get_health()}   ENERGY: {self.herd.dinosaurs[1].get_energy()}  ***
+***  ROBOT: {self.fleet.robots[2].name}           ||   DINOSAUR: {self.herd.dinosaurs[2].name}              ***
+***   HEATLH: {self.fleet.robots[2].get_health()}   POWER: {self.fleet.robots[2].get_power()}   ||    HEALTH: {self.herd.dinosaurs[2].get_health()}   ENERGY: {self.herd.dinosaurs[2].get_energy()}  ***
+***                              ||                               ***
+*********************************************************************
+*********************************************************************'''
+
+            # Formats a standard options menu to show all available choices, paired with a list of current options
+            options_screen = '''
+               ***************************************
+               ***         CURRENT ROBOT:          ***
+               ***                                 ***
+               ***************************************
+                                 '''
+
+            os.system('cls')
+            print(game_screen)
+
+            self.battle()
+
+
+
             break
         print("closing the game now")
 
@@ -22,12 +57,15 @@ class Battlefield:
         os.system('cls')
         welcome_string = '''
 *********************************************************************
+***                                                               ***
 *********************************************************************
+***                                                               ***
 ***                                                               ***
 ***                           WELCOME TO                          ***
 ***                             ROBOTS                            ***
 ***                               VS.                             ***
 ***                            DINOSAURS                          ***
+***                                                               ***
 ***                                                               ***
 *********************************************************************
 *********************************************************************'''
@@ -46,19 +84,63 @@ class Battlefield:
             exit()
 
     def battle(self):
-        pass
+        valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
+        valid_dinosaurs = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+
+        for robot in valid_robots:
+            self.robo_turn(robot)
+            valid_dinosaurs = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+            if len(valid_dinosaurs) == 0:
+                self.winner = "Robots"
+
+        for dino in valid_dinosaurs:
+            self.dino_turn(dino)
+            valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
+            if len(valid_robots) == 0:
+                self.winnner = "Dinosaurs"
 
     def dino_turn(self, dinosaur):
-        pass
+        valid_robots = [robot.name.rstrip() for robot in self.fleet.robots if robot.health > 0]
+        self.show_dino_opponent_options()
+        valid_selection = False
+        while not valid_selection:
+            opponent_selection = input("                              ")
+            if opponent_selection in valid_robots:
+                valid_selection = True
+        
+        robot = [robot for robot in self.fleet.robots if robot.name.rstrip() == opponent_selection]
+        dinosaur.attack(robot[0])
+
 
     def robo_turn(self, robot):
-        pass
+        valid_dinosaurs = [dinosaur.name.rstrip() for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+        self.show_robo_opponent_options()
+        valid_selection = False
+        while not valid_selection:
+            opponent_selection = input("                              ")
+            if opponent_selection in valid_dinosaurs:
+                valid_selection = True
+
+        dinosaur = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.name.rstrip() == opponent_selection]
+        robot.attack(dinosaur[0])
 
     def show_dino_opponent_options(self):
-        pass
+        valid_targets = [robot.name for robot in self.fleet.robots if robot.health > 0]
+        options = "               ***************************************\n"
+        options += "               ***         SELECT OPPONENT         ***\n"
+        for target in valid_targets:
+            options += f"               ***            {target}           ***\n"
+        options += "               ***************************************\n"
+        print(options)
 
     def show_robo_opponent_options(self):
-        pass
+        valid_targets = [dinosaur.name for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+        options = "               ***************************************\n"
+        options += "               ***         SELECT OPPONENT         ***\n"
+        for target in valid_targets:
+            options += f"               ***              {target}               ***\n"
+        options += "               ***************************************\n"
+        print(options)
 
     def display_winners(self):
         pass
@@ -99,6 +181,23 @@ class Robot:
             # Not enough power to attack... What to do?
             pass
 
+    def get_health(self):
+        if self.health > 99:
+            return f'{self.health}'
+        if self.health > 9:
+            return f' {self.health}'
+        if self.health <= 9:
+            return f'  {self.health}'
+
+    def get_power(self):
+        if self.power > 99:
+            return f'{self.health}'
+        if self.power > 9:
+            return f' {self.health}'
+        if self.power <= 9:
+            return f'  {self.health}'
+
+
 class Weapon:
     def __init__(self, name, attack_power):
         self.name = name
@@ -118,5 +217,21 @@ class Dinosaur:
         else:
             # Not enough energy to attack... What to do?
             pass
+
+    def get_health(self):
+        if self.health > 99:
+            return f'{self.health}'
+        if self.health > 9:
+            return f' {self.health}'
+        if self.health <= 9:
+            return f'  {self.health}'
+
+    def get_energy(self):
+        if self.energy > 99:
+            return f'{self.health}'
+        if self.energy > 9:
+            return f' {self.health}'
+        if self.energy <= 9:
+            return f'  {self.health}'
 
 battlefield = Battlefield()

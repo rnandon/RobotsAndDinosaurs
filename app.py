@@ -9,19 +9,24 @@ from random import randint
 ## Classes
 ########################################################
 
+# Battlefield is the main controller for the game
+# It contains the fleet of robots and herd of dinosaurs, and handles the game loop
 class Battlefield:
+    # Get the fleet and herd initialized and show the welcome screen
     def __init__(self):
         self.fleet = Fleet()
         self.herd = Herd()
         self.winner = None
         self.display_welcome()
 
+    # Main game loop
     def run_game(self):
         while self.winner == None:
             self.battle()
 
         self.display_winners()
 
+    # Main splash screen, allows the user to exit the game without starting it
     def display_welcome(self):
         os.system('cls')
         welcome_string = '''
@@ -52,6 +57,7 @@ class Battlefield:
         else:
             exit()
 
+    # Formats and prints the main game screen
     def display_game_screen(self):
         # Formats a standard menu to view the current state of the battle
         # Example Output:
@@ -75,7 +81,8 @@ class Battlefield:
         os.system('cls')
         print(game_screen)
 
-
+    # The key part of the game loop
+    # Checks after each attack that there isn't a winner
     def battle(self):
         valid_robots = [robot for robot in self.fleet.robots if robot.health > 0]
         valid_dinosaurs = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
@@ -94,31 +101,37 @@ class Battlefield:
             if len(valid_robots) == 0:
                 self.winner = "Dinosaurs"
 
+    # Allows the user to select a robot to attack, then conducts the attack
     def dino_turn(self, dinosaur):
+        # Build out the options
         valid_robots = [robot.name.rstrip() for robot in self.fleet.robots if robot.health > 0]
         self.show_dino_opponent_options()
+
         valid_selection = False
         while not valid_selection:
             opponent_selection = input("                              ")
             if opponent_selection in valid_robots:
                 valid_selection = True
         
-        robot = [robot for robot in self.fleet.robots if robot.name.rstrip() == opponent_selection]
+        robot = [robot for robot in self.fleet.robots if robot.name.rstrip().lower() == opponent_selection.lower()]
         dinosaur.attack(robot[0])
 
-
+    # Allows the user to select a dinosaur to attack, then conducts the attack
     def robo_turn(self, robot):
+        # Build out options
         valid_dinosaurs = [dinosaur.name.rstrip() for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
         self.show_robo_opponent_options()
+
         valid_selection = False
         while not valid_selection:
             opponent_selection = input("                              ")
             if opponent_selection in valid_dinosaurs:
                 valid_selection = True
 
-        dinosaur = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.name.rstrip() == opponent_selection]
+        dinosaur = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.name.rstrip().lower() == opponent_selection.lower()]
         robot.attack(dinosaur[0])
 
+    # Get and display only the valid opponents for dinosaurs (robots)
     def show_dino_opponent_options(self):
         valid_targets = [robot.name for robot in self.fleet.robots if robot.health > 0]
         options = "               ***************************************\n"
@@ -128,6 +141,7 @@ class Battlefield:
         options += "               ***************************************\n"
         print(options)
 
+    # Get and display only the valid opponents for robots (dinosaurs)
     def show_robo_opponent_options(self):
         valid_targets = [dinosaur.name for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
         options = "               ***************************************\n"
@@ -137,6 +151,7 @@ class Battlefield:
         options += "               ***************************************\n"
         print(options)
 
+    # Format and display the winner page
     def display_winners(self):
         winner_string =  "*********************************************************************\n"
         winner_string += "***                            WINNERS                            ***\n"
@@ -162,12 +177,13 @@ class Battlefield:
 
 
 
-
+# Robot container
 class Fleet:
     def __init__(self):
         self.robots = []
         self.create_fleet()
 
+    # Initialize robots
     def create_fleet(self):
         names = ["Bleep     ", "Bloop     ", "Terminator"]
         for i in range(3):
@@ -175,12 +191,13 @@ class Fleet:
 
 
 
-
+# Dinosaur container
 class Herd:
     def __init__(self):
         self.dinosaurs = []
         self.create_herd()
 
+    # Initialize dinosaurs
     def create_herd(self):
         names = ["Grr ", "Gar ", "Bill"]
         for i in range(3):
@@ -188,7 +205,7 @@ class Herd:
 
 
 
-
+# Robot. Basics are the same as the dinosaur, but has a weapon, power instead of energy, and only one kind of attack
 class Robot:
     def __init__(self, name):
         self.name = name
@@ -197,6 +214,7 @@ class Robot:
         weapons = [Weapon("Sword", 100), Weapon("Axe", 100), Weapon("Stuffed Rabbit", 100)]
         self.weapon = weapons[randint(0, len(weapons)-1)]
 
+    # Deal damage to the selected dinosaur if the robot has enough power
     def attack(self, dinosaur):
         if self.power >= 10:
             dinosaur.health -= self.weapon.attack_power
@@ -207,6 +225,7 @@ class Robot:
             print(f"     {self.name.rstrip()} doesn't have the power to attack!")
             time.sleep(1)
 
+    # Special formatting for health value
     def get_health(self):
         if self.health > 99:
             return f'{self.health}'
@@ -215,6 +234,7 @@ class Robot:
         if self.health <= 9:
             return f'{self.health}  '
 
+    # Special formatting for power value
     def get_power(self):
         if self.power > 99:
             return f'{self.power}'
@@ -225,7 +245,7 @@ class Robot:
 
 
 
-
+# Controls the attack power of the robot
 class Weapon:
     def __init__(self, name, attack_power):
         self.name = name
@@ -233,7 +253,7 @@ class Weapon:
 
 
 
-
+# Dinosaur. Basics are the same as the robot, but it has its own attack power, energy instead of power, and has multiple attacks to choose from 
 class Dinosaur:
     def __init__(self, name, attack_power):
         self.name = name
@@ -242,6 +262,7 @@ class Dinosaur:
         self.energy = 100
         self.attack_names = ("Swipe", "Slash", "Stomp")
 
+    # Deal damage to selected robot if dinosaur has enough energy 
     def attack(self, robot):
         if self.energy >= 10:
             attack = self.attack_names[randint(0, len(self.attack_names) - 1)]
@@ -253,6 +274,7 @@ class Dinosaur:
             print(f"     {self.name.rstrip()} doesn't have the energy to attack!")
             time.sleep(1)
 
+    # Special formatting for health value
     def get_health(self):
         if self.health > 99:
             return f'{self.health}'
@@ -261,6 +283,7 @@ class Dinosaur:
         if self.health <= 9:
             return f'{self.health}  '
 
+    # Special formatting for energy value
     def get_energy(self):
         if self.energy > 99:
             return f'{self.energy}'
@@ -269,4 +292,10 @@ class Dinosaur:
         if self.energy <= 9:
             return f'{self.energy}  '
 
+
+
+
+
+## Run the program
+###############################################################
 battlefield = Battlefield()

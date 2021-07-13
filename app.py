@@ -201,7 +201,7 @@ class Herd:
     def create_herd(self):
         names = ["Grr ", "Gar ", "Bill"]
         for i in range(3):
-            self.dinosaurs.append(Dinosaur(names[i], randint(15, 30)))
+            self.dinosaurs.append(Dinosaur(names[i], randint(20, 35)))
 
 
 
@@ -211,7 +211,7 @@ class Robot:
         self.name = name
         self.health = 100
         self.power = 100
-        weapons = [Weapon("Sword", randint(15, 25)), Weapon("Axe", randint(10, 30)), Weapon("Stuffed Rabbit", randint(1, 100))]
+        weapons = [Weapon("Sword", randint(15, 25)), Weapon("Axe", randint(10, 30)), Weapon("Stuffed Rabbit", randint(1, 50))]
         self.weapon = weapons[randint(0, len(weapons)-1)]
 
     # Deal damage to the selected dinosaur if the robot has enough power

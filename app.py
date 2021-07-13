@@ -104,31 +104,31 @@ class Battlefield:
     # Allows the user to select a robot to attack, then conducts the attack
     def dino_turn(self, dinosaur):
         # Build out the options
-        valid_robots = [robot.name.rstrip() for robot in self.fleet.robots if robot.health > 0]
+        valid_robots = [robot.name.rstrip().lower() for robot in self.fleet.robots if robot.health > 0]
         self.show_dino_opponent_options()
 
         valid_selection = False
         while not valid_selection:
-            opponent_selection = input("                              ")
+            opponent_selection = input("                              ").lower()
             if opponent_selection in valid_robots:
                 valid_selection = True
         
-        robot = [robot for robot in self.fleet.robots if robot.name.rstrip().lower() == opponent_selection.lower()]
+        robot = [robot for robot in self.fleet.robots if robot.name.lower().rstrip() == opponent_selection]
         dinosaur.attack(robot[0])
 
     # Allows the user to select a dinosaur to attack, then conducts the attack
     def robo_turn(self, robot):
         # Build out options
-        valid_dinosaurs = [dinosaur.name.rstrip() for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
+        valid_dinosaurs = [dinosaur.name.rstrip().lower() for dinosaur in self.herd.dinosaurs if dinosaur.health > 0]
         self.show_robo_opponent_options()
 
         valid_selection = False
         while not valid_selection:
-            opponent_selection = input("                              ")
+            opponent_selection = input("                              ").lower()
             if opponent_selection in valid_dinosaurs:
                 valid_selection = True
 
-        dinosaur = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.name.rstrip().lower() == opponent_selection.lower()]
+        dinosaur = [dinosaur for dinosaur in self.herd.dinosaurs if dinosaur.name.rstrip().lower() == opponent_selection]
         robot.attack(dinosaur[0])
 
     # Get and display only the valid opponents for dinosaurs (robots)
@@ -201,7 +201,7 @@ class Herd:
     def create_herd(self):
         names = ["Grr ", "Gar ", "Bill"]
         for i in range(3):
-            self.dinosaurs.append(Dinosaur(names[i], 1))
+            self.dinosaurs.append(Dinosaur(names[i], randint(15, 30)))
 
 
 
@@ -211,7 +211,7 @@ class Robot:
         self.name = name
         self.health = 100
         self.power = 100
-        weapons = [Weapon("Sword", 100), Weapon("Axe", 100), Weapon("Stuffed Rabbit", 100)]
+        weapons = [Weapon("Sword", randint(15, 25)), Weapon("Axe", randint(10, 30)), Weapon("Stuffed Rabbit", randint(1, 100))]
         self.weapon = weapons[randint(0, len(weapons)-1)]
 
     # Deal damage to the selected dinosaur if the robot has enough power

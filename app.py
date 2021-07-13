@@ -139,6 +139,7 @@ class Battlefield:
         for target in valid_targets:
             options += f"               ***            {target}           ***\n"
         options += "               ***************************************\n"
+        options += "             Type in the name of your selected opponent:"
         print(options)
 
     # Get and display only the valid opponents for robots (dinosaurs)
@@ -149,6 +150,7 @@ class Battlefield:
         for target in valid_targets:
             options += f"               ***              {target}               ***\n"
         options += "               ***************************************\n"
+        options += "             Type in the name of your selected opponent:"
         print(options)
 
     # Format and display the winner page

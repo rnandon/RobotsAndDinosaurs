@@ -171,5 +171,21 @@ class Battlefield:
         winner_string += "***                                                               ***\n"
         winner_string += "*********************************************************************\n"
 
+        reset_option = ""
+        reset_option += "               ***************************************\n"
+        reset_option += "               ***                                 ***\n"
+        reset_option += "               ***            NEW GAME?            ***\n"
+        reset_option += "               ***               Y/N               ***\n"
+        reset_option += "               ***                                 ***\n"
+        reset_option += "               ***************************************\n"
+        reset_option += "                                  "
+
         os.system('cls')
         print(winner_string)
+
+        start_over_selection = input(reset_option)
+        if start_over_selection.lower() == 'y':
+            self = Battlefield()
+        else:
+            os.system('cls')
+            print("\n\n\nGoodbye, see you again soon!!!\n\n\n")

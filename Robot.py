@@ -18,6 +18,8 @@ class Robot:
     def attack(self, dinosaur):
         if self.power >= 10:
             dinosaur.health -= self.weapon.attack_power
+            if dinosaur.health < 0:
+                dinosaur.health = 0
             self.power -= 10
             print(f"     {self.name.rstrip()} attacks {dinosaur.name} for {self.weapon.attack_power} damage!")
             time.sleep(1)

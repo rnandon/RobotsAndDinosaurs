@@ -18,6 +18,8 @@ class Dinosaur:
         if self.energy >= 10:
             attack = self.attack_names[randint(0, len(self.attack_names) - 1)]
             robot.health -= self.attack_power
+            if robot.health < 0:
+                robot.health = 0
             self.energy -= 10
             print(f"     {self.name.rstrip()} attacks {robot.name} with {attack} for {self.attack_power} damage!")
             time.sleep(1)

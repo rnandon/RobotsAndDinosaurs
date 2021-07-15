@@ -25,6 +25,7 @@ class User_Interface:
         self.main_full_bar = f'{self.main_pad}{self.border_character * self.menu_width}{self.end}'
         self.main_empty_bar = f'{self.left_main_border}{" " * self.main_between_border_space}{self.right_main_border}'
         self.secondary_full_bar = f'{self.secondary_pad}{self.border_character * self.options_width}{self.end}'
+        self.secondary_empty_bar = f'{self.left_secondary_border}{" " * self.options_width}{self.right_secondary_border}'
 
     def display_welcome(self, game_name):
         welcome_screen = self.get_welcome_screen(game_name)
@@ -105,7 +106,6 @@ class User_Interface:
 
         return game_screen
 
-
     def format_cell_data(self, left_data, right_data):
         max_data_length = max(len(left_data), len(right_data)) # Make sure to account for different lengths of data
         left_data_length = len(left_data)
@@ -152,11 +152,36 @@ class User_Interface:
 
         return welcome_options
 
-    def get_game_options(self):
-        pass
+    def get_game_options(self, option_name, options):
+        game_options = f'{self.secondary_full_bar}'
+        game_options += f'{self.left_secondary_border}{self.center_value_in_space(option_name, self.secondary_between_border_space)}{self.right_secondary_border}'
+        for option in options:
+            current_line = f'{self.left_secondary_border}{self.center_value_in_space(option, self.secondary_between_border_space}{self.right_secondary_border}'
+            game_options += current_line
+        game_options += f'{self.secondary_full_bar}'
 
-    def get_winner_screen(self):
-        pass
+        return game_options
+
+    def get_winner_screen(self, team_name, winners):
+        # Top of screen
+        winner_screen = f'{self.main_full_bar}'
+        winner_screen += f'{self.left_main_border}{self.center_value_in_space("WINNERS", self.main_between_border_space)}{self.right_main_border}'
+        winner_screen += f'{self.main_full_bar}'
+        winner_screen += f'{self.main_empty_bar}'
+
+        # Winning team and winner names
+        winner_screen += f'{self.left_main_border}{self.center_value_in_space(team_name, self.main_between_border_space)}{self.right_main_border}'
+        winner_screen += f'{self.main_empty_bar}'
+        for winner in winners:
+            current_line = f'{self.left_main_border}{self.center_value_in_space(winner.name, self.main_between_border_space)}{self.right_main_border}'
+            winner_screen += current_line
+
+        # Bottom of screen
+        winner_screen += f'{self.main_empty_bar}'
+        winner_screen += f'{self.main_full_bar}'
+        winner_screen += f'{self.main_full_bar}'
+
+        return winner_screen
 
     def verify_inputs(self, message, options):
         valid_selection = False

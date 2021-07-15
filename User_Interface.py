@@ -1,5 +1,7 @@
 # User Interface class: Handles all interactions with terminal and user
 class User_Interface:
+    ###        INIT METHODS
+    ### ======================================================================
     def __init__(self, menu_width=80, options_width=70, border_thickness=3):
         # Basic definitions
         self.border_character = '*'
@@ -9,8 +11,6 @@ class User_Interface:
         self.border_thickness = border_thickness
 
         self.build_custom_strings()
-
-        
 
     def build_custom_strings(self):
         # Custom widths
@@ -32,6 +32,8 @@ class User_Interface:
         self.secondary_full_bar = f'{self.secondary_pad}{self.border_character * self.options_width}{self.end}'
         self.secondary_empty_bar = f'{self.left_secondary_border}{" " * self.options_width}{self.right_secondary_border}'
 
+    ###        DISPLAY METHODS
+    ### ======================================================================
     def display_welcome(self, game_name):
         welcome_screen = self.get_welcome_screen(game_name)
         welcome_options = self.get_welcome_options()
@@ -51,6 +53,8 @@ class User_Interface:
         print(winner_screen)
         return 0
 
+    ###        STRING FORMATTING METHODS
+    ### =======================================================================
     def get_welcome_screen(self, game_name):
         # Top of welcome screen w/ 2 empty lines before game name
         welcome_screen = f'{self.main_full_bar}'
@@ -71,6 +75,20 @@ class User_Interface:
         welcome_screen += f'{self.main_full_bar}'
 
         return welcome_screen
+
+    def get_welcome_options(self):
+        # Top of options, single full bar + title line
+        welcome_options = f'{self.secondary_full_bar}'
+        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("ARE YOU READY TO BEGIN?", self.secondary_between_border_space)}{self.right_secondary_border}'
+        
+        # Options
+        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("Y/N", self.secondary_between_border_space)}{self.right_secondary_border}'
+
+        # Bottom of options, single full bar and push input area over
+        welcome_options += f'{self.secondary_full_bar}'
+        welcome_options += f'{self.end}{self.end}{self.secondary_pad}'
+
+        return welcome_options
         
     def get_game_screen(self, screen_title, left_cell_title, left_cell_data, right_cell_title, right_cell_data):
         # Find the number of columns in each 'cell' of the screen
@@ -111,6 +129,45 @@ class User_Interface:
 
         return game_screen
 
+    def get_game_options(self, option_name, options):
+        # Top of options, single full bar + title line
+        game_options = f'{self.secondary_full_bar}'
+        game_options += f'{self.left_secondary_border}{self.center_value_in_space(option_name, self.secondary_between_border_space)}{self.right_secondary_border}'
+
+        # Format and add options
+        for option in options:
+            current_line = f'{self.left_secondary_border}{self.center_value_in_space(option, self.secondary_between_border_space)}{self.right_secondary_border}'
+            game_options += current_line
+
+        # Bottom of options, single full bar and push input area over
+        game_options += f'{self.secondary_full_bar}'
+        game_options += f'{self.end}{self.end}{self.secondary_pad}'
+
+        return game_options
+
+    def get_winner_screen(self, team_name, winners):
+        # Top of screen
+        winner_screen = f'{self.main_full_bar}'
+        winner_screen += f'{self.left_main_border}{self.center_value_in_space("WINNERS", self.main_between_border_space)}{self.right_main_border}'
+        winner_screen += f'{self.main_full_bar}'
+        winner_screen += f'{self.main_empty_bar}'
+
+        # Winning team and winner names
+        winner_screen += f'{self.left_main_border}{self.center_value_in_space(team_name, self.main_between_border_space)}{self.right_main_border}'
+        winner_screen += f'{self.main_empty_bar}'
+        for winner in winners:
+            current_line = f'{self.left_main_border}{self.center_value_in_space(winner.name, self.main_between_border_space)}{self.right_main_border}'
+            winner_screen += current_line
+
+        # Bottom of screen
+        winner_screen += f'{self.main_empty_bar}'
+        winner_screen += f'{self.main_full_bar}'
+        winner_screen += f'{self.main_full_bar}'
+
+        return winner_screen
+
+    ###        AUXILIARY METHODS
+    ### ======================================================================
     def format_cell_data(self, left_data, right_data):
         max_data_length = max(len(left_data), len(right_data)) # Make sure to account for different lengths of data
         left_data_length = len(left_data)
@@ -148,47 +205,8 @@ class User_Interface:
 
         return (left_formatted, right_formatted)
 
-    def get_welcome_options(self):
-        welcome_options = f'{self.secondary_full_bar}'
-        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("ARE YOU READY TO BEGIN?", self.secondary_between_border_space)}{self.right_secondary_border}'
-        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("Y/N", self.secondary_between_border_space)}{self.right_secondary_border}'
-        welcome_options += f'{self.secondary_full_bar}'
-        welcome_options += f'{self.end}{self.end}{self.secondary_pad}'
-
-        return welcome_options
-
-    def get_game_options(self, option_name, options):
-        game_options = f'{self.secondary_full_bar}'
-        game_options += f'{self.left_secondary_border}{self.center_value_in_space(option_name, self.secondary_between_border_space)}{self.right_secondary_border}'
-        for option in options:
-            current_line = f'{self.left_secondary_border}{self.center_value_in_space(option, self.secondary_between_border_space}{self.right_secondary_border}'
-            game_options += current_line
-        game_options += f'{self.secondary_full_bar}'
-
-        return game_options
-
-    def get_winner_screen(self, team_name, winners):
-        # Top of screen
-        winner_screen = f'{self.main_full_bar}'
-        winner_screen += f'{self.left_main_border}{self.center_value_in_space("WINNERS", self.main_between_border_space)}{self.right_main_border}'
-        winner_screen += f'{self.main_full_bar}'
-        winner_screen += f'{self.main_empty_bar}'
-
-        # Winning team and winner names
-        winner_screen += f'{self.left_main_border}{self.center_value_in_space(team_name, self.main_between_border_space)}{self.right_main_border}'
-        winner_screen += f'{self.main_empty_bar}'
-        for winner in winners:
-            current_line = f'{self.left_main_border}{self.center_value_in_space(winner.name, self.main_between_border_space)}{self.right_main_border}'
-            winner_screen += current_line
-
-        # Bottom of screen
-        winner_screen += f'{self.main_empty_bar}'
-        winner_screen += f'{self.main_full_bar}'
-        winner_screen += f'{self.main_full_bar}'
-
-        return winner_screen
-
     def verify_inputs(self, message, options):
+        # Take in array of valid options and reprompt the user until a valid option is selected
         valid_selection = False
         user_input = ""
 
@@ -200,10 +218,13 @@ class User_Interface:
         return user_input
 
     def center_value_in_space(self, value, total_width):
+        # Format value to be centered in line
         left_pad = (total_width - len(value)) // 2
         right_pad = total_width - left_pad - len(value)
         return f'{" " * left_pad}{value}{" " * right_pad}'
 
+    ###        TESTING
+    ### ======================================================================
     def tests(self):
         print("Testing internal variables")
         print(self.left_main_border)

@@ -1,7 +1,7 @@
 ## Imports
 ########################################################
-from Battlefield import Battlefield
+from Simulation import Simulation
 
 ## Run the program
 ###############################################################
-battlefield = Battlefield()
+simulation = Simulation()

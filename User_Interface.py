@@ -62,6 +62,15 @@ class User_Interface:
         print(message)
         sleep(1)
 
+    def display_restart(self):
+        restart_screen = self.get_restart_screen()
+        user_selection = self.verify_inputs(restart_screen, ['y', 'n'])
+        return user_selection
+
+    def display_exit(self):
+        exit_screen = self.get_exit_screen()
+        print(exit_screen)
+
     ###        STRING FORMATTING METHODS
     ### =======================================================================
     def get_welcome_screen(self, game_name):
@@ -174,6 +183,40 @@ class User_Interface:
         winner_screen += f'{self.main_full_bar}'
 
         return winner_screen
+
+    def get_restart_screen(self):
+        # Top of screen, full bar + empty bar
+        restart_screen = f'{self.main_full_bar}'
+        restart_screen += f'{self.main_empty_bar}'
+
+        # Middle of screen, format message into empty lines
+        restart_message = ['WOULD YOU', 'LIKE TO', 'PLAY AGAIN?']
+        for part in restart_message:
+            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.menu_width)}{self.right_main_border}'
+            restart_screen += current_line
+
+        # Bottom of screen, empty bar + full bar
+        restart_screen += f'{self.main_empty_bar}'
+        restart_screen += f'{self.main_full_bar}'
+
+        return restart_screen
+
+    def get_exit_screen(self):
+        # Top of screen, full bar + empty bar
+        exit_screen = f'{self.main_full_bar}'
+        exit_screen += f'{self.main_empty_bar}'
+
+        # Middle of screen, format message into empty lines
+        exit_message = ['THANKS', 'FOR', 'PLAYING!']
+        for part in exit_message:
+            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.menu_width)}{self.right_main_border}'
+            exit_screen += current_line
+
+        # Bottom of screen, empty bar + full bar
+        exit_screen += f'{self.main_empty_bar}'
+        exit_screen += f'{self.main_full_bar}'
+
+        return exit_screen
 
     ###        AUXILIARY METHODS
     ### ======================================================================

@@ -8,17 +8,20 @@ from random import randint
 class Simulation:
     def __init__(self):
         self.setup()
-        self.new_game()
+        self.prompt_new_game()
 
     def setup(self):
+        # Initialize components to pass to the game
         self.ui = User_Interface()
         robot_names = ['Bleep', 'Bloop', 'Terminator', 'Clank', 'Dalek', 'Hal', 'T-1000', 'Bender', 'Ultron', 'K-2SO', 'Cyberman']
         dinosaur_names = ['Barney', 'Rex', 'Yoshi', 'Blue', 'Charlie', 'Delta', 'Echo', 'Gojira', 'Tiny', 'Tina']
         weapons = self.get_weapons()
 
+        # Pass control to the Battlefield. This will run until the game is over, then return control here
         self.battlefield = Battlefield(self.ui, robot_names, weapons, dinosaur_names)
 
-    def new_game(self):
+    def prompt_new_game(self):
+        # Ask if the user wants to play again, start a new game if so
         start_over = self.ui.display_restart()
         if start_over == 'y':
             self.setup()
@@ -26,6 +29,7 @@ class Simulation:
             self.ui.display_exit()
 
     def get_weapons(self):
+        # Create default weapons for game to choose from
         weapons = []
 
         weapons.append(Weapon('Sword', randint(20, 40)))

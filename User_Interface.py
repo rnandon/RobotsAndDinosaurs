@@ -118,21 +118,17 @@ class User_Interface:
         return welcome_options
         
     def get_game_screen(self, screen_title, left_cell_title, left_cell_data, right_cell_title, right_cell_data):
-        # Find the number of columns in each 'cell' of the screen
-        left_cell_width = (self.menu_width - (2 * self.border_thickness) - len(self.separator)) // 2
-        right_cell_width = self.menu_width - left_cell_width - (len(self.separator) // 2) - self.border_thickness
-
-         # Get the content for the title row
+        # Get the content for the title row
         title_row_width = self.menu_width - (2 * self.border_thickness)
         title_row = self.center_value_in_space(screen_title, title_row_width)
 
-        # Title bar
+        # Title bar - Title row between two full bars
         game_screen = f'{self.main_full_bar}'
         game_screen += f'{self.left_main_border}{title_row}{self.right_main_border}'
         game_screen += f'{self.main_full_bar}'
         
         # Note - this section will handle left and right cells simultaneously
-        # Cell titles
+        # Cell titles - cell title row followed by full bar
         left_cell_title_label = self.center_value_in_space(left_cell_title, self.left_cell_width)
         right_cell_title_label = self.center_value_in_space(right_cell_title, self.right_cell_width)
         cell_titles = f'{left_cell_title_label}{self.separator}{right_cell_title_label}'
@@ -149,7 +145,7 @@ class User_Interface:
             current_row = f'{self.left_main_border}{left_cell[i]}{self.separator}{right_cell[i]}{self.right_main_border}'
             game_screen += current_row
         
-        # Game screen closure
+        # Game screen bottom - empty row with divider followed by two full bars
         game_screen += f'{self.left_main_border}{self.center_value_in_space(self.separator, self.main_between_border_space)}{self.right_main_border}'
         game_screen += f'{self.main_full_bar}'
         game_screen += f'{self.main_full_bar}'
@@ -230,8 +226,10 @@ class User_Interface:
 
     def get_option_values(self, data):
         options = []
+        # Using numeric selection values, used for list indices after verification
         selections = [f'{i+1}' for i in range(len(data))]
 
+        # Add each option to the list
         for i in range(len(data)):
             current_option = f'{i + 1}: {data[i].name}'
             options.append(current_option)
@@ -259,19 +257,23 @@ class User_Interface:
 
             # Left cell formatting
             if left_current_data:
+                # Format data if there is some
                 left_formatted.append(self.center_value_in_space(f'NAME: {left_current_data.name}', self.left_cell_width))
                 status_line = f'   HEALTH: {left_current_data.get_health()}   POWER: {left_current_data.get_resource()}'
                 left_formatted.append(f'{status_line}{" " * (self.left_cell_width - len(status_line))}')
             else:
+                # Fill with empty lines
                 left_formatted.append(" " * self.left_cell_width)
                 left_formatted.append(" " * self.left_cell_width)
 
             # Right cell formatting
             if right_current_data:
+                # Format data if there is some
                 right_formatted.append(self.center_value_in_space(f'NAME: {right_current_data.name}', self.right_cell_width))
                 status_line = f'   HEALTH: {right_current_data.get_health()}   ENERGY: {right_current_data.get_resource()}'
                 right_formatted.append(f'{status_line}{" " * (self.right_cell_width - len(status_line))}')
             else:
+                # Fill with empty lines
                 right_formatted.append(" " * self.right_cell_width)
                 right_formatted.append(" " * self.right_cell_width)
 

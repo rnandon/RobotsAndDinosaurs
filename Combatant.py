@@ -30,3 +30,21 @@ class Combatant:
 
     def set_attack_power(self, attack_power):
         self.attack_power = attack_power
+
+    # Special formatting for health value
+    def get_health(self):
+        if self.health > 99:
+            return f'{self.health}'
+        if self.health > 9:
+            return f'{self.health} '
+        if self.health <= 9:
+            return f'{self.health}  '
+
+    # Special formatting for energy value
+    def get_resource(self):
+        if self.energy > 99:
+            return f'{self.energy}'
+        if self.energy > 9:
+            return f'{self.energy} '
+        if self.energy <= 9:
+            return f'{self.energy}  '

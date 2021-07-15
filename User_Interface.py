@@ -8,8 +8,13 @@ class User_Interface:
         self.options_width = options_width
         self.border_thickness = border_thickness
 
+        self.build_custom_strings()
+
+        
+
+    def build_custom_strings(self):
         # Custom widths
-        self.main_between_border_space = menu_width - (2 * self.border_thickness)
+        self.main_between_border_space = self.menu_width - (2 * self.border_thickness)
         self.secondary_between_border_space = self.options_width - (2 * self.border_thickness)
         self.left_cell_width = (self.main_between_border_space - len(self.separator)) // 2
         self.right_cell_width = self.main_between_border_space - len(self.separator) - self.left_cell_width

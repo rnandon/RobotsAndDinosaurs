@@ -1,6 +1,6 @@
 # User Interface class: Handles all interactions with terminal and user
 class User_Interface:
-    def __init__(self, menu_width, options_width, border_thickness):
+    def __init__(self, menu_width=80, options_width=70, border_thickness=3):
         # Basic definitions
         self.border_character = '*'
         self.separator = '||'
@@ -9,9 +9,10 @@ class User_Interface:
         self.border_thickness = border_thickness
 
         # Custom widths
-        self.between_border_space = menu_width - (2 * border_thickness)
-        self.left_cell_width = (self.between_border_space - len(self.separator)) // 2
-        self.right_cell_width = self.between_border_space - len(self.separator) - self.left_cell_width
+        self.main_between_border_space = menu_width - (2 * self.border_thickness)
+        self.secondary_between_border_space = self.options_width - (2 * self.border_thickness)
+        self.left_cell_width = (self.main_between_border_space - len(self.separator)) // 2
+        self.right_cell_width = self.main_between_border_space - len(self.separator) - self.left_cell_width
 
         # Creating custom string blocks
         self.main_pad = '\t\t'
@@ -22,7 +23,7 @@ class User_Interface:
         self.left_secondary_border = f'{self.secondary_pad}{self.border_character * self.border_thickness}'
         self.right_secondary_border = self.right_main_border
         self.main_full_bar = f'{self.main_pad}{self.border_character * self.menu_width}{self.end}'
-        self.main_empty_bar = f'{self.left_main_border}{" " * self.between_border_space}{self.right_main_border}'
+        self.main_empty_bar = f'{self.left_main_border}{" " * self.main_between_border_space}{self.right_main_border}'
         self.secondary_full_bar = f'{self.secondary_pad}{self.border_character * self.options_width}{self.end}'
 
     def display_welcome(self, game_name):
@@ -54,7 +55,7 @@ class User_Interface:
 
         # Add each part of the game name on a new line
         for part in game_name:
-            line_content = self.center_value_in_space(part, self.between_border_space)
+            line_content = self.center_value_in_space(part, self.main_between_border_space)
             welcome_screen += f'{self.left_main_border}{line_content}{self.right_main_border}'
 
         # Two empty lines followed by two full width bars of the border character
@@ -143,7 +144,13 @@ class User_Interface:
         return (left_formatted, right_formatted)
 
     def get_welcome_options(self):
-        pass
+        welcome_options = f'{self.secondary_full_bar}'
+        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("ARE YOU READY TO BEGIN?", self.secondary_between_border_space)}{self.right_secondary_border}'
+        welcome_options += f'{self.left_secondary_border}{self.center_value_in_space("Y/N", self.secondary_between_border_space)}{self.right_secondary_border}'
+        welcome_options += f'{self.secondary_full_bar}'
+        welcome_options += f'{self.end}{self.end}{self.secondary_pad}'
+
+        return welcome_options
 
     def get_game_options(self):
         pass
@@ -178,3 +185,5 @@ class User_Interface:
 
         self.display_welcome(['WELCOME TO', 'ROBOTS', 'VS.', 'DINOSAURS'])
 
+# test = User_Interface()
+# test.tests()

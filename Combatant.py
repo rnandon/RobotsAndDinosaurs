@@ -1,9 +1,9 @@
 # Combatant class: parent class for all combatants, implements minimum requirements for each class
 class Combatant:
-    def __init__(self, name, attack_power=0):
+    def __init__(self, name, attack_power=0, resource=100):
         self.name = name
         self.health = 100
-        self.resource = 100
+        self.resource = resource
         self.attack_power = attack_power
 
     ###        METHODS
@@ -42,9 +42,9 @@ class Combatant:
 
     # Special formatting for energy value
     def get_resource(self):
-        if self.energy > 99:
-            return f'{self.energy}'
-        if self.energy > 9:
-            return f'{self.energy} '
-        if self.energy <= 9:
-            return f'{self.energy}  '
+        if self.resource > 99:
+            return f'{self.resource}'
+        if self.resource > 9:
+            return f'{self.resource} '
+        if self.resource <= 9:
+            return f'{self.resource}  '

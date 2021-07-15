@@ -188,7 +188,7 @@ class User_Interface:
             # Left cell formatting
             if left_current_data:
                 left_formatted.append(self.center_value_in_space(f'NAME: {left_current_data.name}', self.left_cell_width))
-                status_line = f'   HEALTH: {left_current_data.get_health()}   POWER: {left_current_data.get_power()}'
+                status_line = f'   HEALTH: {left_current_data.get_health()}   POWER: {left_current_data.get_resource()}'
                 left_formatted.append(f'{status_line}{" " * (len(status_line) - self.left_cell_width)}')
             else:
                 left_formatted.append(" " * self.left_cell_width)
@@ -197,7 +197,7 @@ class User_Interface:
             # Right cell formatting
             if right_current_data:
                 right_formatted.append(self.center_value_in_space(f'NAME: {right_current_data.name}', self.right_cell_width))
-                status_line = f'   HEALTH: {right_current_data.get_health()}   ENERGY: {right_current_data.get_power()}'
+                status_line = f'   HEALTH: {right_current_data.get_health()}   ENERGY: {right_current_data.get_resource()}'
                 right_formatted.append(f'{status_line}{" " * (len(status_line) - self.right_cell_width)}')
             else:
                 right_formatted.append(" " * self.right_cell_width)

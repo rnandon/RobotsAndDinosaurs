@@ -1,10 +1,10 @@
-## Imports
-######################################
+###        IMPORTS
+### ================================
 from Combatant import Combatant
 from random import randint
 
 
-# Dinosaur. Basics are the same as the robot, but it has its own attack power, energy instead of power, and has multiple attacks to choose from 
+# Dinosaur. Implementation of the Combatant class
 class Dinosaur(Combatant):
     def __init__(self, name, attack_power, energy=100):
         self.attack_names = ("Swipe", "Slash", "Stomp")

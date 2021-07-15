@@ -1,3 +1,7 @@
+###        IMPORTS
+### ================================
+from time import sleep
+
 # User Interface class: Handles all interactions with terminal and user
 class User_Interface:
     ###        INIT METHODS
@@ -52,6 +56,11 @@ class User_Interface:
         winner_screen = self.get_winner_screen()
         print(winner_screen)
         return 0
+
+    def display_attack(self, attack_name, damage_dealt, attacker, defender):
+        message = f'{self.main_pad}{attacker} uses {attack_name} to hit {defender} for {damage_dealt} damage!!!'
+        print(message)
+        sleep(1)
 
     ###        STRING FORMATTING METHODS
     ### =======================================================================

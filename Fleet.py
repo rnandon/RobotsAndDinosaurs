@@ -1,8 +1,8 @@
 ###        IMPORTS
 ### ================================
 from Combatant_Group import Combatant_Group
-from random import randint
 from Robot import Robot
+from random import randint
 
 
 # Robot Combatant Group
@@ -15,7 +15,7 @@ class Fleet(Combatant_Group):
 
         # Get a list of robot combatants to pass to the Combatant Group constructor
         robots = self.create_fleet(names, weapons, current_robot_count)
-        super(Combatant_Group, self).__init__(robots)
+        super().__init__(robots)
 
     ###        METHODS
     ### =========================================================

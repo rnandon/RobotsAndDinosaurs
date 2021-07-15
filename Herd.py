@@ -16,7 +16,7 @@ class Herd(Combatant_Group):
 
         # Get a list of dino combatants to pass to the Combatant Group constructor
         dinosaurs = self.create_herd(names, current_dinosaur_count)
-        super(Combatant_Group, self).__init__(dinosaurs)
+        super().__init__(dinosaurs)
 
     ###        METHODS
     ### =========================================================
@@ -24,7 +24,7 @@ class Herd(Combatant_Group):
         dinosaurs = []
         for i in range(dinosaur_count):
             name = names.pop(randint(0, len(names) - 1))
-            current_attack_power = randint(15, 30)
+            current_attack_power = randint(25, 75)
             current_robot = Dinosaur(name, current_attack_power)
             dinosaurs.append(current_robot)
 

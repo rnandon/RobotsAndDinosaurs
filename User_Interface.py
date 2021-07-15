@@ -6,7 +6,7 @@ from time import sleep
 class User_Interface:
     ###        INIT METHODS
     ### ======================================================================
-    def __init__(self, menu_width=80, options_width=70, border_thickness=3):
+    def __init__(self, menu_width=80, options_width=64, border_thickness=3):
         # Basic definitions
         self.border_character = '*'
         self.separator = '||'
@@ -45,20 +45,29 @@ class User_Interface:
         user_selection = self.verify_inputs(welcome_options, ['y', 'n'])
         return user_selection
 
-    def display_game_screen(self, options):
-        game_screen = self.get_game_screen()
-        game_options = self.get_game_options()
-        print(game_screen)
-        user_selection = self.verify_inputs(game_options, options)
-        return user_selection
+    def display_game_screen(self, options_name, options, left_combatants, right_combatants, screen_title="BATTLEFIELD", left_cell_title="ROBOTS", right_cell_title="DINOSAURS"):
+        # Turn data into displayable options and selection values
+        formatted_options = self.get_option_values(options)
+        valid_selections = formatted_options[0]
+        option_texts = formatted_options[1]
 
-    def display_winners(self):
-        winner_screen = self.get_winner_screen()
+        # Format game screen and options menu
+        game_screen = self.get_game_screen(screen_title, left_cell_title, left_combatants, right_cell_title, right_combatants)
+        game_options = self.get_game_options(options_name, option_texts)
+
+        # Display the screen and get user input back
+        print(game_screen)
+        user_selection = self.verify_inputs(game_options, valid_selections)
+        selected_value = options[int(user_selection) - 1]
+        return selected_value
+
+    def display_winners(self, team_name, winners):
+        winner_screen = self.get_winner_screen(team_name, winners)
         print(winner_screen)
         return 0
 
     def display_attack(self, attack_name, damage_dealt, attacker, defender):
-        message = f'{self.main_pad}{attacker} uses {attack_name} to hit {defender} for {damage_dealt} damage!!!'
+        message = f'{self.main_pad}{attacker.name} uses {attack_name} to hit {defender.name} for {damage_dealt} damage!!!'
         print(message)
         sleep(1)
 
@@ -124,8 +133,8 @@ class User_Interface:
         
         # Note - this section will handle left and right cells simultaneously
         # Cell titles
-        left_cell_title_label = self.center_value_in_space(left_cell_title, left_cell_width)
-        right_cell_title_label = self.center_value_in_space(right_cell_title, right_cell_width)
+        left_cell_title_label = self.center_value_in_space(left_cell_title, self.left_cell_width)
+        right_cell_title_label = self.center_value_in_space(right_cell_title, self.right_cell_width)
         cell_titles = f'{left_cell_title_label}{self.separator}{right_cell_title_label}'
         game_screen += f'{self.left_main_border}{cell_titles}{self.right_main_border}'
         game_screen += f'{self.main_full_bar}'
@@ -141,7 +150,7 @@ class User_Interface:
             game_screen += current_row
         
         # Game screen closure
-        game_screen += f'{self.left_main_border}{self.center_value_in_space(self.separator, self.between_border_space)}{self.right_main_border}'
+        game_screen += f'{self.left_main_border}{self.center_value_in_space(self.separator, self.main_between_border_space)}{self.right_main_border}'
         game_screen += f'{self.main_full_bar}'
         game_screen += f'{self.main_full_bar}'
 
@@ -153,7 +162,8 @@ class User_Interface:
         game_options += f'{self.left_secondary_border}{self.center_value_in_space(option_name, self.secondary_between_border_space)}{self.right_secondary_border}'
 
         # Format and add options
-        for option in options:
+        for i in range(len(options)):
+            option = options[i]
             current_line = f'{self.left_secondary_border}{self.center_value_in_space(option, self.secondary_between_border_space)}{self.right_secondary_border}'
             game_options += current_line
 
@@ -190,9 +200,9 @@ class User_Interface:
         restart_screen += f'{self.main_empty_bar}'
 
         # Middle of screen, format message into empty lines
-        restart_message = ['WOULD YOU', 'LIKE TO', 'PLAY AGAIN?']
+        restart_message = ['WOULD YOU', 'LIKE TO', 'PLAY AGAIN?', 'Y/N']
         for part in restart_message:
-            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.menu_width)}{self.right_main_border}'
+            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.main_between_border_space)}{self.right_main_border}'
             restart_screen += current_line
 
         # Bottom of screen, empty bar + full bar
@@ -209,7 +219,7 @@ class User_Interface:
         # Middle of screen, format message into empty lines
         exit_message = ['THANKS', 'FOR', 'PLAYING!']
         for part in exit_message:
-            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.menu_width)}{self.right_main_border}'
+            current_line = f'{self.left_main_border}{self.center_value_in_space(part, self.main_between_border_space)}{self.right_main_border}'
             exit_screen += current_line
 
         # Bottom of screen, empty bar + full bar
@@ -217,6 +227,16 @@ class User_Interface:
         exit_screen += f'{self.main_full_bar}'
 
         return exit_screen
+
+    def get_option_values(self, data):
+        options = []
+        selections = [f'{i+1}' for i in range(len(data))]
+
+        for i in range(len(data)):
+            current_option = f'{i + 1}: {data[i].name}'
+            options.append(current_option)
+
+        return (selections, options)
 
     ###        AUXILIARY METHODS
     ### ======================================================================
@@ -241,7 +261,7 @@ class User_Interface:
             if left_current_data:
                 left_formatted.append(self.center_value_in_space(f'NAME: {left_current_data.name}', self.left_cell_width))
                 status_line = f'   HEALTH: {left_current_data.get_health()}   POWER: {left_current_data.get_resource()}'
-                left_formatted.append(f'{status_line}{" " * (len(status_line) - self.left_cell_width)}')
+                left_formatted.append(f'{status_line}{" " * (self.left_cell_width - len(status_line))}')
             else:
                 left_formatted.append(" " * self.left_cell_width)
                 left_formatted.append(" " * self.left_cell_width)
@@ -250,7 +270,7 @@ class User_Interface:
             if right_current_data:
                 right_formatted.append(self.center_value_in_space(f'NAME: {right_current_data.name}', self.right_cell_width))
                 status_line = f'   HEALTH: {right_current_data.get_health()}   ENERGY: {right_current_data.get_resource()}'
-                right_formatted.append(f'{status_line}{" " * (len(status_line) - self.right_cell_width)}')
+                right_formatted.append(f'{status_line}{" " * (self.right_cell_width - len(status_line))}')
             else:
                 right_formatted.append(" " * self.right_cell_width)
                 right_formatted.append(" " * self.right_cell_width)
